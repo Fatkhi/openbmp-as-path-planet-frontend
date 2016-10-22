@@ -8,17 +8,113 @@
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Hello World!</title>
-  <script src="../Build/Cesium/Cesium.js"></script>
-  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  <script src="Build/Cesium/Cesium.js"></script>
+  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   ></script>
   <script src="script.js"></script>
   <style>
-      @import url(../Build/Cesium/Widgets/widgets.css);
+      @import url(Build/Cesium/Widgets/widgets.css);
       html, body, #cesiumContainer {
           width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
       }
+      html, body{
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        position: relative;
+      }
+      #cesiumContainer {
+        float: left;
+        width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+      #panel {
+        float: left;
+        width: 20%;
+        height: 80%;
+        top: 20%;
+        position: absolute;
+        right: 0;
+
+      }
+      #scroll-panel {
+        height: 70%;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding: 0 2px;
+      }
+      .panel-item {
+        text-align: center;
+        line-height: 30px;
+        height: 30px;
+        width: 100%;
+        background: #303336;
+        border: 1px solid #444;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #edffff;
+        margin-top: 2px;
+        transition: all .4s;
+      }
+      .panel-item.active, .panel-item:hover {
+        border-color: #aef;
+        box-shadow: 0 0 2px 2px rgba(255,255,255, .5);
+        background: #48b;
+      }
+
+      /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+      ::-webkit-scrollbar
+      {
+        width: 8px;
+        height: 16px;
+        background-color: #F5F5F5;
+        border-radius: 4px;
+      }
+
+      /*定义滚动条轨道 内阴影+圆角*/
+      ::-webkit-scrollbar-track
+      {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 4px;
+        background-color: #F5F5F5;
+      }
+
+      /*定义滑块 内阴影+圆角*/
+      ::-webkit-scrollbar-thumb
+      {
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #555;
+      }
+
+    #btn-clear {
+      margin-top: 10px;
+      float: left;
+    }
+    #btn-save {
+      margin-top: 10px;
+      float: right;
+    }
+    .hkt-btn {
+      background-color: #303336;
+    }
+    .hkt-btn:hover {
+      box-shadow: 0 0 2px 2px rgba(255,255,255, .5);
+      background: #48b;
+    }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
+  <div id="panel">
+    <div id="scroll-panel">
+
+    </div>
+    <a class="waves-effect waves-light btn hkt-btn" id="btn-clear" onclick="unSelectAll()">clear</a>
+    <a class="waves-effect waves-light btn hkt-btn" id="btn-save" onclick="save()">save</a>
+  </div>
 </body>
 </html>

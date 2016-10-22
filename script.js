@@ -126,7 +126,37 @@
            }
        }
 
-       aux2(arr1,start,stop);
+        aux2(arr1,start,stop);
+
+        // for webpage panel
+        var i = 0;
+        for (i=0; i<10000; i++) {
+            var obj = document.querySelector('#scroll-panel');
+            var newObj = document.createElement('div');
+            newObj.className = 'panel-item';
+            newObj.dataset.idx = i;
+            newObj.innerHTML = i;
+            newObj.onclick = function() {
+                select(this)
+            };
+            obj.appendChild(newObj)
+        }
+
+        function select(obj) {
+            obj.classList.add('active');
+            selectArr.push(obj.dataset.idx);
+        }
+
+        function unSelectAll() {
+            $('.active').removeClass('active');
+            selectArr = [];
+        }
+
+        function save() {
+
+        }
+
+
 
    }, false);
 }());
