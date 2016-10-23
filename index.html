@@ -8,10 +8,11 @@
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Hello World!</title>
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   ></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="Build/Cesium/Cesium.js"></script>
-  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   ></script>
+
   <script src="script.js"></script>
   <style>
       @import url(Build/Cesium/Widgets/widgets.css);
@@ -32,19 +33,20 @@
       }
       #panel {
         float: left;
-        width: 20%;
+        width: 30%;
         height: 80%;
-        top: 20%;
+        top: 10%;
         position: absolute;
         right: 0;
 
       }
-      #scroll-panel {
+      .scroll-panel {
         height: 70%;
-        width: 100%;
+        width: 50%;
         overflow-x: hidden;
         overflow-y: scroll;
         padding: 0 2px;
+          float: left;
       }
       .panel-item {
         text-align: center;
@@ -105,14 +107,23 @@
       box-shadow: 0 0 2px 2px rgba(255,255,255, .5);
       background: #48b;
     }
+      #prefix-filter {
+          color: white;
+          margin-top: 0;
+          padding-top: 0;
+      }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
   <div id="panel">
-    <div id="scroll-panel">
+      <input placeholder="filter" id="prefix-filter">
+    <div class="scroll-panel" id="route-panel">
 
     </div>
+      <div class="scroll-panel" id="prefix-panel">
+
+      </div>
     <a class="waves-effect waves-light btn hkt-btn" id="btn-clear" onclick="unSelectAll()">clear</a>
     <a class="waves-effect waves-light btn hkt-btn" id="btn-save" onclick="save()">save</a>
   </div>

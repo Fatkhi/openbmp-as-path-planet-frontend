@@ -128,35 +128,102 @@
 
         aux2(arr1,start,stop);
 
-        // for webpage panel
-        var i = 0;
-        for (i=0; i<10000; i++) {
-            var obj = document.querySelector('#scroll-panel');
-            var newObj = document.createElement('div');
-            newObj.className = 'panel-item';
-            newObj.dataset.idx = i;
-            newObj.innerHTML = i;
-            newObj.onclick = function() {
-                select(this)
-            };
-            obj.appendChild(newObj)
-        }
-
-        function select(obj) {
-            obj.classList.add('active');
-            selectArr.push(obj.dataset.idx);
-        }
-
-        function unSelectAll() {
-            $('.active').removeClass('active');
-            selectArr = [];
-        }
-
-        function save() {
-
-        }
-
-
+        initPanel();
 
    }, false);
 }());
+
+// for webpage panel
+var selectIdx = [];
+var selectPrf = [];
+
+// todo: get prefix and idx from server
+function initPanel() {
+    $.ajax({
+        type: 'GET',
+        url: 'http://192.241.130.219:8080/as/' ,
+        success: function(res) {
+            for (i=0; i<res.length; i++) {
+                var obj = document.querySelector('#route-panel');
+                var newObj = document.createElement('div');
+                newObj.className = 'panel-item';
+                newObj.dataset.idx = res[i].number;
+                newObj.innerHTML = res[i].number;
+                newObj.onclick = function() {
+                    select(this)
+                };
+                obj.appendChild(newObj)
+            }
+        } ,
+        dataType: 'json'
+    });
+    $.ajax({
+        type: 'GET',
+        url: 'http://192.241.130.219:8080/prefix/' ,
+        success: function(res) {
+            for (i=0; i<res.length; i++) {
+                var obj = document.querySelector('#prefix-panel');
+                var newObj = document.createElement('div');
+                newObj.className = 'panel-item';
+                newObj.dataset.prefix = res[i].prefix;
+                newObj.innerHTML = res[i].prefix;
+                newObj.onclick = function() {
+                    select(this)
+                };
+                obj.appendChild(newObj)
+            }
+        } ,
+        dataType: 'json'
+    });
+
+    $('#prefix-filter').bind('keyup', function(event) {
+        if (event.keyCode == "13") {
+
+            filterPanel();
+        }
+    });
+}
+
+
+function select(obj) {
+    obj.classList.add('active');
+    if (!!obj.dataset.idx) selectIdx.push(obj.dataset.idx);
+    if (!!obj.dataset.prefix) selectPrf.push(obj.dataset.prefix);
+}
+
+function unSelectAll() {
+    $('.active').removeClass('active');
+    selectIdx = [];
+}
+
+function save() {
+    var dataObj = {
+        'as_path' : selectIdx,
+        prefixes : selectPrf
+    };
+    var url = 'http://192.241.130.219:8080/updates/?as_paths=[' + dataObj.as_path.join(', ') + ']&prefixes=[' + dataObj.prefixes.join(', ') + ']';
+    console.log(dataObj);
+    $.ajax({
+        type: 'GET',
+        url: url ,
+        success: function(res) {
+            console.log(res);
+        } ,
+        dataType: 'json'
+    });
+}
+
+function filterPanel() {
+    var qs = $('#prefix-filter').val();
+    var items = $('.panel-item');
+    for (var i=0; i<items.length; i++) {
+        var thisPrefix = $(items[i]).data('prefix');
+        if (!!thisPrefix && thisPrefix.indexOf(qs) < 0) {
+            $(items[i]).hide();
+        } else {
+            $(items[i]).show();
+        }
+    }
+}
+
+
